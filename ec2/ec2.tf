@@ -1,3 +1,4 @@
+################################## VARIABLES #######################################################
 variable "name" {
   type        = string
   description = "name tag value"
@@ -19,10 +20,10 @@ variable "key_pair_name" {
 
 }
 
+################################## RESOURCES #######################################################
 resource "aws_security_group" "ec2_sg" {
   name        = join("", [var.name, "-", "ec2-sg"])
-  description = "Allow  traffic for http and ssh"
-
+  description = "Allow  traffic for ssh, http, node exporter, and jenkins"
 
   ingress {
     from_port   = 22
@@ -65,8 +66,6 @@ resource "aws_iam_instance_profile" "instance_profile" {
   role = var.iam_role_name
 }
 
-
-
 resource "aws_instance" "web_server" {
   ami                    = "ami-0b0dcb5067f052a63" # amazon linux 2, virginia region
   instance_type          = "t3.small"
@@ -82,5 +81,4 @@ resource "aws_instance" "web_server" {
    root_block_device {
      encrypted = true
    }
-
 }

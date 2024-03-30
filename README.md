@@ -84,14 +84,15 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
     - On line 13, add the link to your githun reposirory
     - Make sure you added the slack channel to line 97
 
-9) #### For checking the checkov scan uncomment lines 74-78 in ec2/ec2.tf file
-    - Go back to your local, open your "devops-fully-automated" project on VSCODE
-    - Open "ec2.tf file" uncomment lines   
+9) #### For the checkov scan uncomment lines 80-84 in ec2/ec2.tf file 
     - Save the changes in both files
     - Finally push changes to repo
-        `git add .`
-        `git commit -m "relevant commit message"`
-        `git push`
+```bash
+git add .
+git commit -m "relevant commit message"
+git push
+```
+
 
 9) #### Skipping all the checks on the Jenkins file comment the checkov scan lines accordingly with # (sure to shell)
 
