@@ -1,4 +1,4 @@
-# fully-automated-infrastructure-provision | DevOps
+# fully-automated-infras-project | DevOps
 This Project uses Jenkins to deploy to fully automate the deployment of AWS infrstructure via Terraform. 
 
 ## Set up the Jenkins Server
@@ -66,7 +66,7 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
 
 ### GitHub webhook
 6) #### Add jenkins webhook to github
-    - Access your repo on github -> **devops-fully-automated-infra**
+    - Access your repo on github -> **fully-automated-infras-project**
     - Goto Settings --> Webhooks --> Click "Add webhook" 
     - Payload URL: **http://REPLACE-JENKINS-SERVER-PUBLIC-IP:8080/github-webhook/**             
     (Note: The IP should be public as GitHub is outside of the AWS VPC where Jenkins server is hosted)
@@ -84,7 +84,10 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
     - On line 13, add the link to your githun reposirory
     - Make sure you added the slack channel to line 97
 
-9) #### For the checkov scan uncomment lines 80-84 in ec2/ec2.tf file 
+9) #### For the checkov scanner 
+    - uncomment lines 79-83 in ec2/ec2.tf file
+    - uncomment lines 50, 60 or 61 in the Jenkinsfile
+    (Can skip all the checks by commenting out the checkov scan lines accordingly) 
     - Save the changes in both files
     - Finally push changes to repo
 ```bash
@@ -93,19 +96,22 @@ git commit -m "relevant commit message"
 git push
 ```
 
+### Finally observe the whole flow and See the Results :) 
+10) #### Apply Infra
+    - On the Jenkins Web Server, observe the pipeline progress
+    - select "Proceed" with the Manual Approval to create the instances
+    - Check out the e-commerce app by using **public-ip-of-servers:8080**
 
-9) #### Skipping all the checks on the Jenkins file comment the checkov scan lines accordingly with # (sure to shell)
-
-## Finally observe the whole flow and understand the integrations :) 
-
-### Destroy the infra
-10) #### Once the flow is observed, lets destroy the infra with same code
-    - Go back to your local, open your "devops-fully-automated" project on VSCODE
+11) #### Destroy Infra
+    - On the Jenkins Web Server, select "proceed" with the 2nd Manual Approval stage
+    - The instances will be terminated
+    - Go back to your local, open your "fully-automated-infras-project"
     - Open "Jenkinsfile" comment lines 59, 76-82 & uncomment lines 61, 84-90
     - Save the changes in both files
-    - Finally push changes to repo
-        `git add .`
-        `git commit -m "relevant commit message"`
-        `git push`
+```bash
+git add .
+git commit -m "relevant commit message"
+git push
+```
 
 11) #### Terminate Jenkins EC2 instance

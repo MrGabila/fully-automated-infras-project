@@ -57,7 +57,7 @@ pipeline {
                 sudo pip3 install --upgrade pip
                 sudo pip3 install checkov
                 #checkov -d .
-                #checkov -d . --skip-check CKV_AWS_23,CKV_AWS_24,CKV_AWS_126,CKV_AWS_135,CKV_AWS_8,CKV_AWS_23,CKV_AWS_24
+                #checkov -d . --skip-check CKV_AWS_23,CKV_AWS_24,CKV_AWS_126,CKV_AWS_135,CKV_AWS_8
                 checkov -d . --skip-check CKV_AWS*
                 """
                
@@ -77,6 +77,14 @@ pipeline {
             steps {
                 echo 'Terraform apply...'                           
                 sh 'sudo terraform apply --auto-approve'
+               
+            }
+        }
+
+        stage('Manual approval') {
+            steps {
+                
+                input 'Approval required for destruction'
                
             }
         }
