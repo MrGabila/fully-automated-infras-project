@@ -1,3 +1,9 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
+################################## MODULES #########################################################
+
 # module to create IAM role and policy for the CloudWatch access
 module "iam" {
   source = "./iam"
