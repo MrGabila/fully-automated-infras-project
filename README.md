@@ -11,9 +11,17 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
 - Launch Instance
 - After launching this Jenkins server, attach a tag as **Key=Application, value=jenkins**
 
+### Configure Slack
+1) ###### Slack
+    - Create a channel within a Workspace on Slack
+    - Store the workspace name (workspace.slack.com), and channel ID
+    - Goto the Repo, and add channel name to the Jenkinsfile **#channelname** line 97
+    - Intergate Jenkins to Slack
+        - Right-click channel -> View channel details -> Integrations -> Add App -> select "Jenkins" -> Configuration (This will open a link on browser)
+        - Select the channel -> Integrate (keep this page open and follow the instructions later to add Slack to Jenkins)
 
-### Configure Jenkins and Set up the automated process
-1) #### Access Jenkins
+### Configure Jenkins 
+2) #### Access Jenkins
     Copy your Jenkins Public IP Address and paste on the browser = ExternalIP:8080
     - Login to your Jenkins instance using your Shell (GitBash or your Mac Terminal)
     - Copy the Path from the Jenkins UI to get the Administrator Password
@@ -23,19 +31,17 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
     - Provide 
         - Username: **admin**
         - Password: **admin**
-        - Name and Email can also be admin. You can use `admin` all, as its a poc.
+        - Name and Email can also be admin.
     - Continue and Start using Jenkins
 
-2)  #### Plugin installations:
+3)  #### Plugin installations:
     - Click on "Manage Jenkins"
     - Click on "Plugins"
     - Click "Available Plugins"
     - Search and Install the following Plugings "Install Without Restart"        
         - **Slack Notification**
 
-
-
-3)  #### Pipeline creation
+4)  #### Pipeline creation
     - Click on **New Item**
     - Enter an item name: **app-infra-pipeline** & select the category as **Pipeline**
     - Now scroll-down and in the Pipeline section --> Definition --> Select Pipeline script from SCM
@@ -46,35 +52,27 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
         - Script Path: Jenkinsfile
     - Save
 
-4) ###### Slack 
-    - Create a channel within a Workspace on Slack
-    - Store the workspace name (workspace.slack.com), and channel ID
-    - Intergate Jenkins
-        - View channel details -> Integrations -> Add App -> select "Jenkins" -> Configuration (This will open a link on browser)
-        - Select the channel -> integrate (keep this page open and follow the instructions to add Slack to Jenkins)
-
-5)  #### Credentials setup(Slack):
-    1)  #### Configure slack credentials for the pipeline to post alerts on slack channel:
-        - Click on Manage Jenkins --> System
-        - Go to section Slack
-        - Workspace: (copy from slack page -Team subdomain)
-        - Credentials: Click on Add button to add new credentials
-            - Kind: Secret text            
-            - Secret: (copy from slack page -Token Credential ID)
-            - ID: slack-token
-            - Description: slack-token
-            - Click on Create        
+5)  #### Slack Credentials set up:
+    - Click on Manage Jenkins --> System
+    - Go to section Slack
+    - Workspace: (copy from slack page -Team subdomain)
+    - Credentials: Click on Add button to add new credentials
+        - Kind: Secret text            
+        - Secret: (copy from slack page -Token Credential ID)
+        - ID: slack-token
+        - Description: slack-token
+        - Click on Create        
 
 
 ### GitHub webhook
-
-1) #### Add jenkins webhook to github
+6) #### Add jenkins webhook to github
     - Access your repo on github -> **devops-fully-automated-infra**
-    - Goto Settings --> Webhooks --> Click on Add webhook 
-    - Payload URL: **http://REPLACE-JENKINS-SERVER-PUBLIC-IP:8080/github-webhook/**             (Note: The IP should be public as GitHub is outside of the AWS VPC where Jenkins server is hosted)
-    - Click on Add webhook
+    - Goto Settings --> Webhooks --> Click "Add webhook" 
+    - Payload URL: **http://REPLACE-JENKINS-SERVER-PUBLIC-IP:8080/github-webhook/**             
+    (Note: The IP should be public as GitHub is outside of the AWS VPC where Jenkins server is hosted)
+    - Sroll and "Add Webhook"
 
-2) #### Configure on the Jenkins side to pull based on the event
+7) #### Configure on the Jenkins side to pull based on the event
     - Access your jenkins server, pipeline **app-infra-pipeline**
     - Once pipeline is accessed --> Click on Configure --> In the General section --> **Select GitHub project checkbox** and fill your repo URL of the project devops-fully-automated.
     - Scroll down --> In the Build Triggers section -->  Select **GitHub hook trigger for GITScm polling checkbox**
@@ -82,8 +80,11 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
 
 
 ### Codebase setup
+8) #### Jenkinsfile
+    - On line 13, add the link to your githun reposirory
+    - Make sure you added the slack channel to line 97
 
-1) #### For checking the checkov scan uncomment lines 74-78 in ec2/ec2.tf file
+9) #### For checking the checkov scan uncomment lines 74-78 in ec2/ec2.tf file
     - Go back to your local, open your "devops-fully-automated" project on VSCODE
     - Open "ec2.tf file" uncomment lines   
     - Save the changes in both files
@@ -92,13 +93,12 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
         `git commit -m "relevant commit message"`
         `git push`
 
-2) #### Skipping all the checks on the Jenkins file comment the checkov scan lines accordingly with # (sure to shell)
+9) #### Skipping all the checks on the Jenkins file comment the checkov scan lines accordingly with # (sure to shell)
 
 ## Finally observe the whole flow and understand the integrations :) 
 
 ### Destroy the infra
-
-1) #### Once the flow is observed, lets destroy the infra with same code
+10) #### Once the flow is observed, lets destroy the infra with same code
     - Go back to your local, open your "devops-fully-automated" project on VSCODE
     - Open "Jenkinsfile" comment lines 59, 76-82 & uncomment lines 61, 84-90
     - Save the changes in both files
@@ -107,6 +107,4 @@ This Project uses Jenkins to deploy to fully automate the deployment of AWS infr
         `git commit -m "relevant commit message"`
         `git push`
 
-2) #### Terminate Jenkins EC2 instance
-
-# Happy learning, everyone 😊 😊
+11) #### Terminate Jenkins EC2 instance
