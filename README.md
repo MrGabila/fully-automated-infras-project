@@ -100,18 +100,10 @@ git push
 10) #### Apply Infra
     - On the Jenkins Web Server, observe the pipeline progress
     - select "Proceed" with the Manual Approval to create the instances
-    - Check out the e-commerce app by using **public-ip-of-servers:8080**
+    - Check out the e-commerce app by using **public-ip-of-servers:80**
 
 11) #### Destroy Infra
     - On the Jenkins Web Server, select "proceed" with the 2nd Manual Approval stage
     - The instances will be terminated
-    - Go back to your local, open your "fully-automated-infras-project"
-    - Open "Jenkinsfile" comment lines 59, 76-82 & uncomment lines 61, 84-90
-    - Save the changes in both files
-```bash
-git add .
-git commit -m "relevant commit message"
-git push
-```
 
-11) #### Terminate Jenkins EC2 instance
+12) #### Terminate Jenkins Web Server

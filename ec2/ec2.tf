@@ -23,7 +23,7 @@ variable "key_pair_name" {
 ################################## RESOURCES #######################################################
 resource "aws_security_group" "ec2_sg" {
   name        = join("", [var.name, "-", "ec2-sg"])
-  description = "Allow  traffic for ssh, http, node exporter, and application port 8080"
+  description = "Allow  traffic for ssh, http, and node exporter"
 
   ingress {
     from_port   = 22

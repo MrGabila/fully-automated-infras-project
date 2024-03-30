@@ -1,5 +1,5 @@
 #!/bin/bash
-# Hardware requirements: Amazon Linux 2 with min t2.micro 
+# Hardware requirements: Amazon Linux 2 with minimum t2.micro 
 # Open ports 8080(application port), 9100 (node-exporter port) should be allowed on the security groups
 # setup for the ansible configuration
 sudo yum update –y
@@ -43,10 +43,10 @@ sudo yum install git -y
 
 
 # Clone the repository
-git clone https://github.com/cvamsikrishna11/ecommerce-web-app.git
+git clone https://github.com/TheModeler99/simple_practice_applications.git
 
 # Copy the files inside the cloned folder to the desired location
-sudo cp -r ecommerce-web-app/server1/* /var/www/html/
+sudo cp -r simple_practice_applications/ecommerce-app/server1/* /var/www/html/
 
 # To get the current hostname address
 echo "<center><p>Running the website from instance host: $(hostname -f)</p></center>" >> /var/www/html/index.html
