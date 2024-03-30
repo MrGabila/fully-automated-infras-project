@@ -1,31 +1,18 @@
-# devops-fully-automated-infra
-Fully automated and secured Terraform infra pipeline
+# fully-automated-infrastructure-provision | DevOps
+This Project uses Jenkins to deploy to fully automate the deployment of AWS infrstructure via Terraform. 
 
-Testing teh webhook.....
+## Set up the Jenkins Server
+- Create an **Amazon Linux 2 VM** instance and call it "Jenkins"
+- Instance type: t2.large
+- Security Group (Open): 8080, 9100 and 22 to 0.0.0.0/0
+- Key pair: Select or create a new keypair
+- **Attach Jenkins server with IAM role having "AdministratorAccess"**
+- User data (user data): 
+- Launch Instance
+- After launching this Jenkins server, attach a tag as **Key=Application, value=jenkins**
 
-## CICD Infra setup
-1) ###### GitHub setup
-    Fork GitHub Repository by using the existing repo "devops-fully-automated-infra" (https://github.com/cvamsikrishna11/devops-fully-automated-infra)     
-    - Go to GitHub (github.com)
-    - Login to your GitHub Account
-    - **Fork repository "devops-fully-automated-infra" (https://github.com/cvamsikrishna11/devops-fully-automated-infra.git) & name it "devops-fully-automated-infra"**
-    - Clone your newly created repo to your local
 
-2) ###### Jenkins
-    - Create an **Amazon Linux 2 VM** instance and call it "Jenkins"
-    - Instance type: t2.large
-    - Security Group (Open): 8080, 9100 and 22 to 0.0.0.0/0
-    - Key pair: Select or create a new keypair
-    - **Attach Jenkins server with IAM role having "AdministratorAccess"**
-    - User data (Copy the following user data): https://github.com/cvamsikrishna11/devops-fully-automated/blob/installations/jenkins-maven-ansible-setup.sh
-    - Launch Instance
-    - After launching this Jenkins server, attach a tag as **Key=Application, value=jenkins**
-
-3) ###### Slack 
-    - **Join the slack channel https://join.slack.com/t/slack-wcl4742/shared_invite/zt-1kid01o3n-W47OUTHBd2ZZpSzGnow1Wg**
-    - **Join into the channel "#team-devops"**
-
-### Jenkins setup
+### Configure Jenkins and Set up the automated process
 1) #### Access Jenkins
     Copy your Jenkins Public IP Address and paste on the browser = ExternalIP:8080
     - Login to your Jenkins instance using your Shell (GitBash or your Mac Terminal)
@@ -59,17 +46,21 @@ Testing teh webhook.....
         - Script Path: Jenkinsfile
     - Save
 
+4) ###### Slack 
+    - Create a channel within a Workspace on Slack
+    - Store the workspace name (workspace.slack.com), and channel ID
+    - Intergate Jenkins
+        - View channel details -> Integrations -> Add App -> select "Jenkins" -> Configuration (This will open a link on browser)
+        - Select the channel -> integrate (keep this page open and follow the instructions to add Slack to Jenkins)
 
-
-4)  #### Credentials setup(Slack):
+5)  #### Credentials setup(Slack):
     1)  #### Configure slack credentials for the pipeline to post alerts on slack channel:
         - Click on Manage Jenkins --> System
         - Go to section Slack
-        - Workspace: **devopsfullyau-r0x2686** (if not working try with name of workspace devops-fully-automated)
+        - Workspace: (copy from slack page -Team subdomain)
         - Credentials: Click on Add button to add new credentials
-            - Slack secret token (slack-token)
             - Kind: Secret text            
-            - Secret: 3jrfd3GjdMac0dgcxJwcOgQU
+            - Secret: (copy from slack page -Token Credential ID)
             - ID: slack-token
             - Description: slack-token
             - Click on Create        
@@ -78,17 +69,16 @@ Testing teh webhook.....
 ### GitHub webhook
 
 1) #### Add jenkins webhook to github
-    - Access your repo **devops-fully-automated-infra** on github
+    - Access your repo on github -> **devops-fully-automated-infra**
     - Goto Settings --> Webhooks --> Click on Add webhook 
-    - Payload URL: **htpp://REPLACE-JENKINS-SERVER-PUBLIC-IP:8080/github-webhook/**             (Note: The IP should be public as GitHub is outside of the AWS VPC where Jenkins server is hosted)
+    - Payload URL: **http://REPLACE-JENKINS-SERVER-PUBLIC-IP:8080/github-webhook/**             (Note: The IP should be public as GitHub is outside of the AWS VPC where Jenkins server is hosted)
     - Click on Add webhook
 
 2) #### Configure on the Jenkins side to pull based on the event
     - Access your jenkins server, pipeline **app-infra-pipeline**
     - Once pipeline is accessed --> Click on Configure --> In the General section --> **Select GitHub project checkbox** and fill your repo URL of the project devops-fully-automated.
-    - Scroll down --> In the Build Triggers section -->  **Select GitHub hook trigger for GITScm polling checkbox**
-
-Once both the above steps are done click on Save.
+    - Scroll down --> In the Build Triggers section -->  Select **GitHub hook trigger for GITScm polling checkbox**
+    - Save
 
 
 ### Codebase setup
