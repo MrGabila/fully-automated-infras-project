@@ -6,7 +6,7 @@ provider "aws" {
 ################################## VARIABLES #######################################################
 variable "key_pair_name" {
   type        = string
-  description = "keypair to utilize"
+  description = "the SSH Keypair"
   default = "dzeko-Virginia-region"
 }
 
@@ -14,7 +14,7 @@ locals {
   common_tags = {
     company    = "Bluejay.internal"
     owner      = "Gabinator"
-    team-email = "devops-team@bluejay.com"  #"team-devops@jjtech.com"
+    team-email = "devops-team@bluejay.com"
     time       = formatdate("DD MMM YYYY hh:mm ZZZ", timestamp())
   }
 
